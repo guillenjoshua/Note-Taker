@@ -3,7 +3,8 @@ const fs = require('fs')
 const path = require('path');
 const uniqid = require('uniqid')
 
-// const notesApp = require("../db/db.json");
+
+    //parsing JSON file to use in GET/POST
         const dataBuffer = fs.readFileSync('Develop/db/db.json')
         const dataJSON = dataBuffer.toString()
         let notesApp = JSON.parse(dataJSON)
@@ -23,27 +24,28 @@ module.exports = function(app) {
         res.json(notesApp);
       });
 
-
+      //POST - Still need to complete
       app.post("/api/notes", (req, res) => {
 
                 const addNote = req.body
 
                     addNote.id = uniqid()
                     notesApp.push(addNote)
-                    addToDb();
+                    addToNotes();
                 });
 
-                
+                //GET id from notes
                 app.get(".api/notes/:id", (req, res) => {
-
                     res.json(notesApp[req.params.id]);
                 })
 
-       
-                
-                    function addToDb() {
-                      const dataJSON = JSON.stringify(notesApp)
-                      fs.writeFileSync('Develop/db/db.json', dataJSON, err => {
+                //Need to add Delete???
+
+
+                //Function to add to notes, which is called in POST
+                    function addToNotes() {
+                      const dataJSONAdd = JSON.stringify(notesApp)
+                      fs.writeFileSync('Develop/db/db.json', dataJSONAdd, err => {
                         if (err) throw err;
                         return true;
                       })
