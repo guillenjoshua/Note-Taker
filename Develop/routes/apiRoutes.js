@@ -1,11 +1,23 @@
 
 const fs = require('fs')
+const path = require('path');
+const uniqid = require('uniqid')
 
-const notesApp = require("../db/db.json");
-// const indexJS = require("../public/assets/js/index");
+// const notesApp = require("../db/db.json");
+        const dataBuffer = fs.readFileSync('Develop/db/db.json')
+        const dataJSON = dataBuffer.toString()
+        let notesApp = JSON.parse(dataJSON)
+
+
 
 
 module.exports = function(app) {
+
+    // fs.readFile("Develop/db/db.json", "utf8", (err, data) => {
+    //     if (err) throw err;
+    
+    //     // let notesApp = JSON.parse(data);
+    // })
 
     app.get("/api/notes", (req, res) => {
         res.json(notesApp);
@@ -13,52 +25,32 @@ module.exports = function(app) {
 
 
       app.post("/api/notes", (req, res) => {
+
+                const addNote = req.body
+
+                    addNote.id = uniqid()
+                    notesApp.push(addNote)
+                    addToDb();
+                });
+
+                
+                app.get(".api/notes/:id", (req, res) => {
+
+                    res.json(notesApp[req.params.id]);
+                })
+
        
-        const getNotes = () => {
-          try {
-              const dataBuffer = fs.readFileSync('../db/db.json')
-              const dataJSON = dataBuffer.toString()
-              return JSON.parse(dataJSON)
-      
-          } catch (e) {
-              return []
-          }
-              
-      }
-
-      const saveNote = function (title, body) {
-        const notes = getNotes()
-        const duplicateNotes = notes.filter(function (note) {
-                return note.title === title
-        })
-    
-        if (duplicateNotes.length === 0) {
-            notes.push({
-                title: title, 
-                body: body
-            })
-            saveNotes(notes)
-            console.log('New Note Added')
-        } else {
-            console.log('Note Title Taken')
-        }
-        
-    }
-
-    const saveNotes = function (notes) {
-      const dataJSON = JSON.stringify(notes)
-      fs.writeFileSync('../db/db.json', dataJSON)
-  }
-        
-
-      });
-
-        // app.post("/api/clear", (req, res) => {
-        //     // Empty out the arrays of data
-        //     tableData.length = 0;
-        //     waitListData.length = 0;
-        
-        //     res.json({ ok: true });
-        //   });
+                
+                    function addToDb() {
+                      const dataJSON = JSON.stringify(notesApp)
+                      fs.writeFileSync('Develop/db/db.json', dataJSON, err => {
+                        if (err) throw err;
+                        return true;
+                      })
+                      
+                  }
+                        
 
 }
+
+    
