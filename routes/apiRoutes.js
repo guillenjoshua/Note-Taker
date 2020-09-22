@@ -5,7 +5,7 @@ const uniqid = require('uniqid')
 
 
     //parsing JSON file to use in GET/POST
-        const dataBuffer = fs.readFileSync('Develop/db/db.json')
+        const dataBuffer = fs.readFileSync('./db/db.json')
         const dataJSON = dataBuffer.toString()
         let notesApp = JSON.parse(dataJSON)
 
@@ -14,17 +14,12 @@ const uniqid = require('uniqid')
 
 module.exports = function(app) {
 
-    // fs.readFile("Develop/db/db.json", "utf8", (err, data) => {
-    //     if (err) throw err;
     
-    //     // let notesApp = JSON.parse(data);
-    // })
-
     app.get("/api/notes", (req, res) => {
         res.json(notesApp);
       });
 
-      //POST - Still need to complete
+      //POST - add to notes, function called from ln 46
       app.post("/api/notes", (req, res) => {
 
                 const addNote = req.body
@@ -45,7 +40,7 @@ module.exports = function(app) {
                 //Function to add to notes, which is called in POST
                     function addToNotes() {
                       const dataJSONAdd = JSON.stringify(notesApp)
-                      fs.writeFileSync('Develop/db/db.json', dataJSONAdd, err => {
+                      fs.writeFileSync('./db/db.json', dataJSONAdd, err => {
                         if (err) throw err;
                         return true;
                       })

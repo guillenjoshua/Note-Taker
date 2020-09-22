@@ -1,18 +1,18 @@
 const express = require("express");
 const app = express();
-const helmet = require('helmet')
+// const helmet = require('helmet')
 
 const PORT = process.env.PORT || 3000;
 
-app.use(helmet())
+// app.use(helmet())
 
 // app.use(express.static('/public'))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-require("./Develop/routes/apiRoutes")(app);
-require("./Develop/routes/htmlRoutes")(app);
+require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
 
 
 app.listen(PORT, function() {
