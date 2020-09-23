@@ -11,7 +11,6 @@ const uniqid = require('uniqid')
 
 
 
-
 module.exports = function(app) {
 
     
@@ -27,6 +26,8 @@ module.exports = function(app) {
                     addNote.id = uniqid()
                     notesApp.push(addNote)
                     addToNotes();
+                    res.send('this worked!')
+                    return console.log("Added new note: " +addNote.title);
                 });
 
                 //GET id from notes
@@ -34,8 +35,16 @@ module.exports = function(app) {
                     res.json(notesApp[req.params.id]);
                 })
 
-                //Need to add Delete???
-
+                //Delete notes with ID
+                app.delete("/api/notes/:id", (req, res) => {
+                    notesApp = notesApp.filter(
+                        note => {
+                            return note.id != req.params.id
+                        }
+                    )
+                     addToNotes();
+                     res.send('this worked!')
+                    });
 
                 //Function to add to notes, which is called in POST
                     function addToNotes() {
